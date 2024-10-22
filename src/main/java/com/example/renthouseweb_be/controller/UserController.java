@@ -100,11 +100,6 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return new ResponseEntity<>("Hello World", HttpStatus.OK);
-    }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
@@ -115,7 +110,7 @@ public class UserController {
     public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user1 = userOptional.get();
@@ -131,13 +126,13 @@ public class UserController {
     }
 
     @PatchMapping("/users/avatar/{id}")
-    public ResponseEntity<User> updateUserAvatar(@PathVariable Long id, @RequestParam String userAvt) {
+    public ResponseEntity<User> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
         Optional<User> userOptional = this.userService.findById(id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user1 = userOptional.get();
-        user1.setImageUser(userAvt);
+        user1.setImageUser(user.getImageUser());
         userService.save(user1);
         return new ResponseEntity<>(user1, HttpStatus.OK);
     }
