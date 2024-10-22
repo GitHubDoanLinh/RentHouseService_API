@@ -25,7 +25,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
-public class Usercontroller {
+public class UserController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -34,7 +34,7 @@ public class Usercontroller {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public Usercontroller(AuthenticationManager authenticationManager,
+    public UserController(AuthenticationManager authenticationManager,
                           JwtService jwtService,
                           UserService userService,
                           RoleService roleService,
