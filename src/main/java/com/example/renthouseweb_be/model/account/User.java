@@ -5,7 +5,6 @@ import javax.validation.constraints.Email;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
-
 import lombok.*;
 
 @Entity
@@ -30,13 +29,17 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private String confirmPassword;
-
+    private String fullName;
+    private String address;
+    private String phone;
+    private int age;
     @Column(nullable = false, unique = true)
     @Email(message = "Email không hợp lệ")
     private String email;
 
     private String dateOfBirth;
     private String imageUser;
+    @Column(columnDefinition = "int default 0")
     private int isOwner;
     private boolean enabled = true;
 
