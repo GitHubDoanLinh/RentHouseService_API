@@ -1,10 +1,9 @@
 package com.example.renthouseweb_be.model;
 
+import com.example.renthouseweb_be.model.account.User;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -19,10 +18,6 @@ public class House {
     private String description;
     @Column(nullable = false)
     private double price;
-    @CreationTimestamp
-    private LocalDateTime startTime;
-    @CreationTimestamp
-    private LocalDateTime endTime;
     @Column(nullable = false)
     private String location;
     @Column(nullable = false)
@@ -46,5 +41,10 @@ public class House {
             }
     )
     private Set<Convenient> convenients;
+
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
+    @ManyToOne
+    private User user;
 
 }

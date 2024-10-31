@@ -1,4 +1,6 @@
 package com.example.renthouseweb_be.service;
 
-public interface CategoryService <E>{
+import com.example.renthouseweb_be.model.Category;
+
+public interface CategoryService extends IGenerateService<Category> {
 }

@@ -1,4 +1,6 @@
 package com.example.renthouseweb_be.service;
 
-public interface ConvenientService <E>{
+import com.example.renthouseweb_be.model.Convenient;
+
+public interface ConvenientService extends IGenerateService<Convenient> {
 }

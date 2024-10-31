@@ -13,4 +13,6 @@ public class Image {
     private String image;
     @ManyToOne
     private House house;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 }

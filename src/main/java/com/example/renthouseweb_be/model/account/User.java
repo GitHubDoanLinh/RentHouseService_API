@@ -42,6 +42,8 @@ public class User implements Serializable {
     @Column(columnDefinition = "int default 0")
     private int isOwner;
     private boolean enabled = true;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",

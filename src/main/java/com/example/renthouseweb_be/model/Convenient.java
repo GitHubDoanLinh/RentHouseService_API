@@ -11,4 +11,6 @@ public class Convenient {
     private Long id;
     @Column
     private String name;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 }

@@ -1,4 +1,6 @@
 package com.example.renthouseweb_be.service;
 
-public interface ImageService <E>{
+import com.example.renthouseweb_be.model.Image;
+
+public interface ImageService extends IGenerateService<Image> {
 }
