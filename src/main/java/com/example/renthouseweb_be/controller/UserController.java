@@ -1,6 +1,7 @@
 package com.example.renthouseweb_be.controller;
 
 import com.example.renthouseweb_be.dto.JwtDTO;
+import com.example.renthouseweb_be.dto.PasswordRequest;
 import com.example.renthouseweb_be.dto.UserDTO;
 import com.example.renthouseweb_be.model.account.JwtResponse;
 import com.example.renthouseweb_be.model.account.Role;
@@ -167,7 +168,21 @@ public class UserController {
             return new ResponseEntity<>(modelMapperUtil.mapList(userList, UserDTO.class), HttpStatus.OK);
         }
     }
-
+    @PatchMapping("/users/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) {
+        User currentUser = userService.getCurrentUser();
+        if (passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword())) {
+            if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            String newPassword = passwordEncoder.encode(passwordRequest.getPassword());
+            currentUser.setPassword(newPassword);
+            currentUser.setConfirmPassword(newPassword);
+            userService.save(currentUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
 }
 

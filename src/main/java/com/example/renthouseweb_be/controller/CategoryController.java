@@ -1,7 +1,6 @@
 package com.example.renthouseweb_be.controller;
 import com.example.renthouseweb_be.model.Category;
 import com.example.renthouseweb_be.service.impl.CategoryServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

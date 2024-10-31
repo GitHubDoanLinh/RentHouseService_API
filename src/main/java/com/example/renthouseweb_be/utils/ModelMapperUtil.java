@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class ModelMapperUtil {
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    public ModelMapperUtil(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
     public <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
         return source
                 .stream()
