@@ -1,4 +1,4 @@
-package com.example.renthouseweb_be.dto;
+package com.example.renthouseweb_be.requests;
 
 import lombok.Data;
 

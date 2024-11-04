@@ -1,7 +1,7 @@
 package com.example.renthouseweb_be.controller;
 
 import com.example.renthouseweb_be.dto.JwtDTO;
-import com.example.renthouseweb_be.dto.PasswordRequest;
+import com.example.renthouseweb_be.requests.PasswordRequest;
 import com.example.renthouseweb_be.dto.UserDTO;
 import com.example.renthouseweb_be.model.account.JwtResponse;
 import com.example.renthouseweb_be.model.account.Role;
