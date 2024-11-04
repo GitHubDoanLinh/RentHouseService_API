@@ -1,18 +1,24 @@
 package com.example.renthouseweb_be.service.impl;
 
+import com.example.renthouseweb_be.model.House;
 import com.example.renthouseweb_be.model.Image;
+import com.example.renthouseweb_be.repository.HouseRepository;
 import com.example.renthouseweb_be.repository.ImageRepository;
 import com.example.renthouseweb_be.service.ImageService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ImageServiceImpl implements ImageService{
     private final ImageRepository imageRepository;
+    private final HouseRepository houseRepository;
 
-    public ImageServiceImpl(ImageRepository imageRepository) {
+    public ImageServiceImpl(ImageRepository imageRepository, HouseRepository houseRepository) {
         this.imageRepository = imageRepository;
+        this.houseRepository = houseRepository;
     }
 
     @Override
@@ -21,7 +27,7 @@ public class ImageServiceImpl implements ImageService{
     }
     @Override
     public Iterable<Image> findAllByDeleteFlag(boolean deleteFlag) {
-        return null;
+        return imageRepository.findAllByDeleteFlag(false);
     }
     @Override
     public Optional<Image> findOneById(Long id) {
@@ -34,6 +40,30 @@ public class ImageServiceImpl implements ImageService{
     @Override
     public void delete(Long id) {
         Optional<Image> image = imageRepository.findById(id);
-        image.ifPresent(value -> value.setDeleteFlag(true));
+        if(image.isPresent()){
+            image.get().setDeleteFlag(true);
+            imageRepository.save(image.get());
+        }
     }
+    @Override
+    public Iterable<Image> findAllByHouseId(Long houseId) {
+        return imageRepository.findAllByHouseId(houseId);
+    }
+
+    @Override
+    @Transactional
+    public Iterable<Image> addImagesToHouse(Long houseId, List<String> imageUrls) {
+        House house = houseRepository.findById(houseId)
+                .orElseThrow(() -> new RuntimeException("House not found"));
+        for (String imageUrl : imageUrls) {
+            Image image = new Image();
+            image.setImage(imageUrl);
+            image.setHouse(house);
+            imageRepository.save(image);
+        }
+        // Lấy danh sách ảnh đã được thêm vào nhà
+        return imageRepository.findAllByHouseId(houseId);
+    }
+
+
 }

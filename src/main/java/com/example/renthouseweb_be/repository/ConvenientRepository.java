@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConvenientRepository extends JpaRepository<Convenient, Long> {
+    Iterable<Convenient> findAllByDeleteFlag(boolean deleteFlag);
 }

@@ -1,6 +1,8 @@
 package com.example.renthouseweb_be.service.impl;
 
+import com.example.renthouseweb_be.model.Convenient;
 import com.example.renthouseweb_be.model.House;
+import com.example.renthouseweb_be.repository.ConvenientRepository;
 import com.example.renthouseweb_be.repository.HouseRepository;
 import com.example.renthouseweb_be.service.HouseService;
 import org.springframework.data.domain.Page;
@@ -8,16 +10,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class HouseServiceImpl implements HouseService{
+public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
+    private final ConvenientRepository convenient;
 
-    public HouseServiceImpl(HouseRepository houseRepository) {
+    public HouseServiceImpl(HouseRepository houseRepository, ConvenientRepository convenient) {
         this.houseRepository = houseRepository;
+        this.convenient = convenient;
     }
 
     @Override
@@ -63,10 +70,24 @@ public class HouseServiceImpl implements HouseService{
 
     @Override
     public void delete(Long id) {
-        Optional<House> house= houseRepository.findById(id);
-        if(house.isPresent()){
+        Optional<House> house = houseRepository.findById(id);
+        if (house.isPresent()) {
             house.get().setDeleteFlag(true);
             houseRepository.save(house.get());
         }
     }
+
+    @Transactional
+    public void addConvenientsToHouse(Long houseId, List<Long> convenientIds) {
+        Optional<House> houseOptional = houseRepository.findById(houseId);
+        if (houseOptional.isPresent()) {
+            House house = houseOptional.get();
+            Set<Convenient> convenients = house.getConvenients();
+            convenients.addAll(convenient.findAllById(convenientIds));
+            houseRepository.save(house);
+        } else {
+            throw new RuntimeException("House not found");
+        }
+    }
+
 }

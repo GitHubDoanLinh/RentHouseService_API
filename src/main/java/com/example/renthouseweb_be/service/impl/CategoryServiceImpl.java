@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Iterable<Category> findAllByDeleteFlag(boolean deleteFlag) {
-        return null;
+        return categoryRepository.findAllByDeleteFlag(false);
     }
 
     @Override
@@ -37,8 +37,14 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void delete(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        category.ifPresent(value -> value.setDeleteFlag(true));
-        categoryRepository.save(category.get());
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            category.setDeleteFlag(true);
+            categoryRepository.save(category);
+        } else {
+            throw new RuntimeException("Category not found with id: " + id);
+        }
     }
+
 }

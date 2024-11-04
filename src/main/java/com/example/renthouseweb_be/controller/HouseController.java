@@ -85,5 +85,14 @@ public class HouseController {
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
 
+    @PostMapping("/{houseId}/addConvenient")
+    public ResponseEntity<String> addConvenientToHouse(@PathVariable Long houseId, @RequestBody List<Long> convenientIds) {
+        try {
+            houseService.addConvenientsToHouse(houseId, convenientIds);
+            return ResponseEntity.ok("Convenients added to house successfully");
+        }catch (Exception e) {
+            return ResponseEntity.status(500).body("Error when adding convenients to house:" +e.getMessage());
+        }
+    }
 
 }

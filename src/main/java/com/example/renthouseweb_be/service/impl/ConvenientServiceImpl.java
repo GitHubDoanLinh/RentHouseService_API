@@ -21,7 +21,7 @@ public class ConvenientServiceImpl implements ConvenientService {
 
     @Override
     public Iterable<Convenient> findAllByDeleteFlag(boolean deleteFlag) {
-        return null;
+        return convenientRepository.findAllByDeleteFlag(false);
     }
 
     @Override
@@ -36,8 +36,14 @@ public class ConvenientServiceImpl implements ConvenientService {
 
     @Override
     public void delete(Long id) {
-        Optional<Convenient> convenient = convenientRepository.findById(id);
-        convenient.ifPresent(value -> value.setDeleteFlag(true));
-        convenientRepository.save(convenient.get());
+        Optional<Convenient> convenientOptional = convenientRepository.findById(id);
+        if (convenientOptional.isPresent()) {
+            Convenient convenient = convenientOptional.get();
+            convenient.setDeleteFlag(true);
+            convenientRepository.save(convenient);
+        } else {
+            throw new RuntimeException("Convenient not found with id: " + id);
+        }
     }
+
 }
