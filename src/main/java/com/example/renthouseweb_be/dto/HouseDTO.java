@@ -1,5 +1,6 @@
 package com.example.renthouseweb_be.dto;
 
+import com.example.renthouseweb_be.model.Category;
 import com.example.renthouseweb_be.model.Convenient;
 import lombok.Data;
 
@@ -11,5 +12,6 @@ public class HouseDTO {
     private String description;
     private double price;
     private String location;
+    private Category category;
     private Set<Convenient> convenients;
 }

@@ -1,6 +1,7 @@
 package com.example.renthouseweb_be.controller;
 import com.example.renthouseweb_be.dto.HouseDTO;
 import com.example.renthouseweb_be.model.House;
+import com.example.renthouseweb_be.response.CreateHouseResponse;
 import com.example.renthouseweb_be.service.impl.HouseServiceImpl;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
 import org.springframework.data.domain.Page;
@@ -34,8 +35,13 @@ public class HouseController {
         return new ResponseEntity<>(modelMapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
     @PostMapping("/create")
-    public ResponseEntity<House> save(@RequestBody House house) {
-        return new ResponseEntity<>(houseService.save(house), HttpStatus.OK);
+    public ResponseEntity<CreateHouseResponse> save(@RequestBody House house) {
+        try {
+            houseService.save(house);
+            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(new CreateHouseResponse(false,"ER-HO-01"), HttpStatus.BAD_REQUEST);
+        }
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<House> delete(@PathVariable Long id){
