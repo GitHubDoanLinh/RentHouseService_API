@@ -45,9 +45,10 @@ public class ImageServiceImpl implements ImageService{
             imageRepository.save(image.get());
         }
     }
+
     @Override
-    public Iterable<Image> findAllByHouseId(Long houseId) {
-        return imageRepository.findAllByHouseId(houseId);
+    public Iterable<Image> findAllByHouseIdAndDeleteFlag(Long houseId, boolean deleteFlag) {
+        return imageRepository.findAllByHouseIdAndAndDeleteFlag(houseId, deleteFlag);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ImageServiceImpl implements ImageService{
             imageRepository.save(image);
         }
         // Lấy danh sách ảnh đã được thêm vào nhà
-        return imageRepository.findAllByHouseId(houseId);
+        return imageRepository.findAllByHouseIdAndAndDeleteFlag(houseId, false);
     }
 
 

@@ -35,7 +35,7 @@ public class ImageController {
 
     @GetMapping("/{houseId}")
     public ResponseEntity<List<Image>> getAllByHouseId(@PathVariable Long houseId) {
-        List<Image> images = (List<Image>) imageService.findAllByHouseId(houseId);
+        List<Image> images = (List<Image>) imageService.findAllByHouseIdAndDeleteFlag(houseId, false);
         if (images.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

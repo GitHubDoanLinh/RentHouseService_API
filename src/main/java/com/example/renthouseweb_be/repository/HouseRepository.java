@@ -11,4 +11,6 @@ public interface HouseRepository extends JpaRepository<House, Long> {
     Iterable<House> findAllByDeleteFlag(boolean deleteFlag);
     Page<House> findAllByCategoryId(Long categoriesId, Pageable pageable);
     Page<House> findAllByLocation(String location, Pageable pageable);
+    Iterable<House> findAllByUserIdAndDeleteFlag(Long userId, boolean deleteFlag);
+    Iterable<House> findByNameContainsIgnoreCaseAndAndDeleteFlag(String name, boolean deleteFlag);
 }

@@ -1,6 +1,8 @@
 package com.example.renthouseweb_be.controller;
+
 import com.example.renthouseweb_be.dto.HouseDTO;
 import com.example.renthouseweb_be.model.House;
+import com.example.renthouseweb_be.requests.CreateHouseRequest;
 import com.example.renthouseweb_be.response.CreateHouseResponse;
 import com.example.renthouseweb_be.service.impl.HouseServiceImpl;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
@@ -22,10 +24,12 @@ import java.util.Optional;
 public class HouseController {
     private final HouseServiceImpl houseService;
     private final ModelMapperUtil modelMapperUtil;
+
     public HouseController(HouseServiceImpl houseService, ModelMapperUtil modelMapperUtil) {
         this.houseService = houseService;
         this.modelMapperUtil = modelMapperUtil;
     }
+
     @GetMapping("")
     public ResponseEntity<List<HouseDTO>> showAll() {
         List<House> house = (List<House>) houseService.findAllByDeleteFlag(false);
@@ -34,20 +38,27 @@ public class HouseController {
         }
         return new ResponseEntity<>(modelMapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
+
     @PostMapping("/create")
-    public ResponseEntity<CreateHouseResponse> save(@RequestBody House house) {
+    public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
         try {
-            houseService.save(house);
+            House savedHouse = houseService.save(request);
+            //Lưu danh sách ảnh bất đồng bộ.
+            List<String> imageList = request.getImages();
+            houseService.saveImageListAsync(savedHouse, imageList);
             return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
-        }catch (Exception e) {
-            return new ResponseEntity<>(new CreateHouseResponse(false,"ER-HO-01"), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
+
     }
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<House> delete(@PathVariable Long id){
+    public ResponseEntity<House> delete(@PathVariable Long id) {
         houseService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<House> update(@PathVariable Long id, @RequestBody House house) {
         house.setId(id);
@@ -58,7 +69,7 @@ public class HouseController {
     @GetMapping("/{id}")
     public ResponseEntity<Optional<House>> findById(@PathVariable Long id) {
         Optional<House> house = houseService.findOneById(id);
-        if(house.isEmpty()){
+        if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(house, HttpStatus.OK);
@@ -83,7 +94,7 @@ public class HouseController {
 
     @PostMapping("/searchByCate")
     public ResponseEntity<Page<House>> searchByCategory(@PageableDefault(value = 12)
-        Pageable pageable, @RequestBody Long categoriesId) {
+                                                        Pageable pageable, @RequestBody Long categoriesId) {
         if (categoriesId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -96,8 +107,8 @@ public class HouseController {
         try {
             houseService.addConvenientsToHouse(houseId, convenientIds);
             return ResponseEntity.ok("Convenients added to house successfully");
-        }catch (Exception e) {
-            return ResponseEntity.status(500).body("Error when adding convenients to house:" +e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error when adding convenients to house:" + e.getMessage());
         }
     }
 

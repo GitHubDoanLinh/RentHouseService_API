@@ -9,4 +9,6 @@ public interface HouseService extends IGenerateService<House> {
     Page<House> getAllHousesSortedByPriceUp(int page, int size);
     Page<House> findAllByCategoryId(Long categoriesId,Pageable pageable);
     Page<House> findAllByLocation(String location, Pageable pageable);
+    Iterable<House> findAllByUserIdAndDeleteFlag(Long userId, boolean deleteFlag);
+    Iterable<House> findByNameContainsIgnoreCaseAndDeleteFlag(String name, boolean deleteFlag);
 }
