@@ -112,4 +112,23 @@ public class HouseController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<HouseDTO>> getAllByUserId(@PathVariable Long userId) {
+        List<House> houses = (List<House>) houseService.findAllByUserIdAndDeleteFlag(userId, false);
+        if (houses.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(modelMapperUtil.mapList(houses, HouseDTO.class), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<HouseDTO>> searchByNameContain(@RequestParam String name) {
+        List<House> houses = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name, false);
+        if(houses.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(modelMapperUtil.mapList(houses, HouseDTO.class), HttpStatus.OK);
+    }
+
 }
