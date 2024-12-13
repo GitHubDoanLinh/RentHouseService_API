@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 import lombok.*;
 
@@ -12,7 +13,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,7 +41,9 @@ public class User implements Serializable {
     private String imageUser;
     @Column(columnDefinition = "int default 0")
     private int isOwner;
-    private boolean enabled = true;
+    private boolean enabled;
+    private String verificationToken;
+    private Date verificationTokenExpiryDate;
     @Column(columnDefinition = "tinyint default 0")
     private boolean deleteFlag;
 

@@ -12,6 +12,8 @@ public interface UserService  extends UserDetailsService{
     Iterable<User> findAll();
 
     User findByUsername(String username);
+    User findByEmail(String email);
+    User findByVerificationToken(String token);
 
     User getCurrentUser();
 
@@ -26,4 +28,6 @@ public interface UserService  extends UserDetailsService{
     boolean isCorrectConfirmPassword(User user);
 
     Iterable<User> searchUserByName(String name);
+    String generateVerificationToken(User user);
+    boolean activateUserAccount(String token);
 }

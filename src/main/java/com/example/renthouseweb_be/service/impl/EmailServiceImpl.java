@@ -39,8 +39,8 @@ public class EmailServiceImpl implements EmailService {
                     = new SimpleMailMessage();
             mailMessage.setFrom(sender);
             mailMessage.setTo(details.getRecipient());
-            mailMessage.setText(details.getMsgBody());
-            mailMessage.setSubject(details.getSubject());
+//            mailMessage.setText(details.getMsgBody());
+//            mailMessage.setSubject(details.getSubject());
             String htmlTemplate = Arrays.toString(readFile("template.html"));
             javaMailSender.send(mailMessage);
             return "Mail Sent Successfully...";
@@ -60,22 +60,16 @@ public class EmailServiceImpl implements EmailService {
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
-            mimeMessageHelper.setText(details.getMsgBody());
-            mimeMessageHelper.setSubject(
-                    details.getSubject());
             // Adding the attachment
             FileSystemResource file
                     = new FileSystemResource(
                     new File(details.getAttachment()));
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
-            // Sending the mail
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
-        // Catch block to handle MessagingException
         catch (MessagingException e) {
-            // Display message when exception occurred
             return "Error while sending mail!!!";
         }
     }
@@ -87,7 +81,6 @@ public class EmailServiceImpl implements EmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setTo(details.getRecipient());
-            mimeMessageHelper.setSubject(details.getSubject());
             String htmlContent = templateEngine.process(template, context);
             mimeMessageHelper.setText(htmlContent, true);
             javaMailSender.send(mimeMessage);
