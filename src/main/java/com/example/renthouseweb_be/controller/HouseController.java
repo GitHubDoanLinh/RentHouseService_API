@@ -67,12 +67,12 @@ public class HouseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<House>> findById(@PathVariable Long id) {
+    public ResponseEntity<HouseDTO> findById(@PathVariable Long id) {
         Optional<House> house = houseService.findOneById(id);
         if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(house, HttpStatus.OK);
+        return new ResponseEntity<>(modelMapperUtil.map(house, HouseDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/showAll")

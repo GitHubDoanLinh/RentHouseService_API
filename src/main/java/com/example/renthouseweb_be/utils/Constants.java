@@ -15,5 +15,6 @@ public class Constants {
         SystemMessage.put("MS-US-01", "Register succeed");
         SystemMessage.put("MS-VR-01","Xác thực email thành công");
         SystemMessage.put("ER-VR-01","Liên kết kích hoạt không hợp lệ hoặc đã hết hạn.");
+        SystemMessage.put("MS-LO-01", "Đăng xuất thành công");
     }
 }

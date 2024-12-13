@@ -6,6 +6,7 @@ import com.example.renthouseweb_be.dto.UserDTO;
 import com.example.renthouseweb_be.model.account.JwtResponse;
 import com.example.renthouseweb_be.model.account.Role;
 import com.example.renthouseweb_be.model.account.User;
+import com.example.renthouseweb_be.response.LogoutResponse;
 import com.example.renthouseweb_be.response.VerifyTokenResponse;
 import com.example.renthouseweb_be.service.RoleService;
 import com.example.renthouseweb_be.service.UserService;
@@ -109,6 +110,11 @@ public class UserController {
         return ResponseEntity.ok(modelMapperUtil.map(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()), JwtDTO.class));
     }
 
+    @GetMapping("/users/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return new ResponseEntity<>(new LogoutResponse(true, "MS-LO-01"), HttpStatus.OK);
+    }
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
