@@ -3,7 +3,7 @@ package com.example.renthouseweb_be.requests;
 import com.example.renthouseweb_be.model.Category;
 import com.example.renthouseweb_be.model.account.User;
 import lombok.Data;
-
+import java.util.Set;
 import java.util.List;
 
 @Data
@@ -19,4 +19,5 @@ public class CreateHouseRequest {
     private User user;
     private Category category;
     private List<String> images;
+    private List<Long> convenientIds;
 }
