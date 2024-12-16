@@ -53,18 +53,29 @@ public class HouseController {
 
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CreateHouseResponse> update(@PathVariable Long id, @RequestBody CreateHouseRequest request) {
+        try {
+            request.setId(id);
+            houseService.save(request);
+            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<House> delete(@PathVariable Long id) {
         houseService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<House> update(@PathVariable Long id, @RequestBody House house) {
-        house.setId(id);
-        houseService.save(house);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<House> update(@PathVariable Long id, @RequestBody House house) {
+//        house.setId(id);
+//        houseService.save(house);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<HouseDTO> findById(@PathVariable Long id) {

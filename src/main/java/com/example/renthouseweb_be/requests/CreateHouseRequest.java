@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class CreateHouseRequest {
+    private Long id;
     private String name;
     private String description;
     private double price;
