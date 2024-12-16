@@ -1,5 +1,6 @@
 package com.example.renthouseweb_be.service;
 
+import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.account.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.Optional;
 
 public interface UserService  extends UserDetailsService{
-    void save(User user);
+    void save(User user) throws CommonException;
 
     Iterable<User> findAll();
 

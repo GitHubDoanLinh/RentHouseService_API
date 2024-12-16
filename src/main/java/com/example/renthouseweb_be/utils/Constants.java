@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_USER = "ROLE_USER";
     public static final Map<String, String> SystemMessage;
     static {
         SystemMessage = new HashMap<>();
@@ -16,5 +18,6 @@ public class Constants {
         SystemMessage.put("MS-VR-01","Xác thực email thành công");
         SystemMessage.put("ER-VR-01","Liên kết kích hoạt không hợp lệ hoặc đã hết hạn.");
         SystemMessage.put("MS-LO-01", "Đăng xuất thành công");
+        SystemMessage.put("HR-USER-99","Lỗi khi tạo tài khoản.");
     }
 }

@@ -1,14 +1,11 @@
 package com.example.renthouseweb_be.controller;
 
-import com.example.renthouseweb_be.dto.JwtDTO;
+import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.requests.PasswordRequest;
 import com.example.renthouseweb_be.dto.UserDTO;
-import com.example.renthouseweb_be.model.account.JwtResponse;
-import com.example.renthouseweb_be.model.account.Role;
 import com.example.renthouseweb_be.model.account.User;
 import com.example.renthouseweb_be.response.LogoutResponse;
 import com.example.renthouseweb_be.response.VerifyTokenResponse;
-import com.example.renthouseweb_be.service.RoleService;
 import com.example.renthouseweb_be.service.UserService;
 import com.example.renthouseweb_be.service.impl.JwtService;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
@@ -16,42 +13,34 @@ import com.example.renthouseweb_be.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
-    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapperUtil modelMapperUtil;
 
     @Autowired
-    public UserController(AuthenticationManager authenticationManager,
-                          JwtService jwtService,
-                          UserService userService,
-                          RoleService roleService,
-                          PasswordEncoder passwordEncoder,
-                          ModelMapperUtil modelMapperUtil) {
-        this.authenticationManager = authenticationManager;
+    public UserController(
+            JwtService jwtService,
+            UserService userService,
+            PasswordEncoder passwordEncoder,
+            ModelMapperUtil modelMapperUtil) {
         this.jwtService = jwtService;
         this.userService = userService;
-        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapperUtil = modelMapperUtil;
     }
@@ -68,53 +57,12 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> createUser(@RequestBody User user, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Iterable<User> users = userService.findAll();
-        for (User currentUser : users) {
-            if (currentUser.getUsername().equals(user.getUsername())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-        }
-        if (!userService.isCorrectConfirmPassword(user)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        if (user.getRoles() != null) {
-            Role role = roleService.findByName("ROLE_ADMIN");
-            Set<Role> roles = new HashSet<>();
-            roles.add(role);
-            user.setRoles(roles);
-        } else {
-            Role role1 = roleService.findByName("ROLE_USER");
-            Set<Role> roles1 = new HashSet<>();
-            roles1.add(role1);
-            user.setRoles(roles1);
-        }
-        user.setIsOwner(0);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
-        userService.save(user);
-        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtService.generateTokenLogin(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userService.findByUsername(user.getUsername());
-        return ResponseEntity.ok(modelMapperUtil.map(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()), JwtDTO.class));
-    }
-
     @GetMapping("/users/logout")
     public ResponseEntity<?> logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
         return new ResponseEntity<>(new LogoutResponse(true, "MS-LO-01"), HttpStatus.OK);
     }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
@@ -123,7 +71,7 @@ public class UserController {
     }
 
     @PatchMapping("/users/{id}")
-    public ResponseEntity<UserDTO> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDTO> updateUserProfile(@PathVariable Long id, @RequestBody User user) throws CommonException {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
         Long authenticatedUserId = this.userService.getCurrentUser().getId();
@@ -147,7 +95,7 @@ public class UserController {
     }
 
     @PatchMapping("/users/avatar/{id}")
-    public ResponseEntity<UserDTO> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDTO> updateUserAvatar(@PathVariable Long id, @RequestBody User user) throws CommonException {
         Optional<User> userOptional = this.userService.findById(id);
         Long authenticatedUserId = this.userService.getCurrentUser().getId();
         if (!authenticatedUserId.equals(id)) {
@@ -170,13 +118,14 @@ public class UserController {
         List<User> userList = (List<User>) userService.searchUserByName(name);
         if (userList == null) {
             List<User> users = (List<User>) userService.findAll();
-            return new ResponseEntity<>(modelMapperUtil.mapList(users,UserDTO.class), HttpStatus.OK);
+            return new ResponseEntity<>(modelMapperUtil.mapList(users, UserDTO.class), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(modelMapperUtil.mapList(userList, UserDTO.class), HttpStatus.OK);
         }
     }
+
     @PatchMapping("/users/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) {
+    public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) throws CommonException {
         User currentUser = userService.getCurrentUser();
         if (passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword())) {
             if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
@@ -195,9 +144,9 @@ public class UserController {
     public ResponseEntity<VerifyTokenResponse> activateAccount(@RequestParam String token) {
         boolean activationResult = userService.activateUserAccount(token);
         if (activationResult) {
-            return new ResponseEntity<>(new VerifyTokenResponse(true,"MS-VR-01"),HttpStatus.OK);
+            return new ResponseEntity<>(new VerifyTokenResponse(true, "MS-VR-01"), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new VerifyTokenResponse(false,"ER-VR-01"),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new VerifyTokenResponse(false, "ER-VR-01"), HttpStatus.BAD_REQUEST);
         }
     }
 

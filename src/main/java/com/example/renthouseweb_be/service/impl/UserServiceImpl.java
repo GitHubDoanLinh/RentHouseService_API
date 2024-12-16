@@ -1,5 +1,6 @@
 package com.example.renthouseweb_be.service.impl;
 
+import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.account.User;
 import com.example.renthouseweb_be.model.account.UserPrinciple;
 import com.example.renthouseweb_be.repository.UserRepository;
@@ -25,7 +26,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public void save(User user) {
+    public void save(User user) throws CommonException {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new CommonException("Username đã tồn tại");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new CommonException("Email đã tồn tại");
+        }
+        userRepository.save(user);
         userRepository.save(user);
     }
 
@@ -146,15 +154,6 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        if (this.checkLogin(user)) {
-            return UserPrinciple.build(user);
-        }
-        boolean enable = false;
-        boolean accountNonExpired = false;
-        boolean credentialsNonExpired = false;
-        boolean accountNonLocked = false;
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), enable, accountNonExpired, credentialsNonExpired,
-                accountNonLocked, null);
+        return UserPrinciple.build(user);
     }
 }

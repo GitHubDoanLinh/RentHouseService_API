@@ -2,6 +2,7 @@ package com.example.renthouseweb_be.model.account;
 
 import jakarta.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,16 +23,18 @@ public class User implements Serializable {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @Pattern(regexp = "[a-zA-Z0-9_.]*")
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Transient
     private String confirmPassword;
     private String fullName;
     private String address;
     private String phone;
+    @Column(nullable = true)
     private int age;
     @Column(nullable = false, unique = true)
     @Email(message = "Email không hợp lệ")
@@ -48,9 +51,7 @@ public class User implements Serializable {
     private boolean deleteFlag;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
 }
 
