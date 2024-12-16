@@ -1,4 +1,4 @@
-package com.example.renthouseweb_be.utils;
+package com.example.renthouseweb_be.dto.converter;
 
 import com.example.renthouseweb_be.dto.HouseDTO;
 import com.example.renthouseweb_be.dto.UserDTO;
@@ -7,7 +7,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 
-public class CustomHouseDTOConverter implements Converter<House, HouseDTO> {
+public class HouseDTOConverter implements Converter<House, HouseDTO> {
     @Override
     public HouseDTO convert(MappingContext<House, HouseDTO> mappingContext) {
         ModelMapper modelMapper = new ModelMapper();
