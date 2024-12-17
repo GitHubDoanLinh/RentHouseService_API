@@ -22,6 +22,8 @@ public class Booking {
     @Column
     private Date startDate;
     @Column
+    private Date createAt;
+    @Column
     private Date endDate;
     @Column(name = "number_of_guests")
     private Integer numberOfGuests;
@@ -32,4 +34,6 @@ public class Booking {
     @JoinColumn(name = "house_id")
     private House house;
     private Double price;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 }

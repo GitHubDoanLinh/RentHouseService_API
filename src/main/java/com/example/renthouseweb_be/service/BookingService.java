@@ -2,6 +2,7 @@ package com.example.renthouseweb_be.service;
 
 import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.Booking;
+import com.example.renthouseweb_be.model.BookingStatus;
 import com.example.renthouseweb_be.model.House;
 import com.example.renthouseweb_be.model.account.User;
 import com.example.renthouseweb_be.repository.BookingRepository;
@@ -23,7 +24,7 @@ public class BookingService {
         this.houseRepository = houseRepository;
     }
     public Booking save(BookingRequest request) throws CommonException {
-        if (request.getStartDate() == null) {
+        if (request.getStartDate() == null  || request.getEndDate() == null) {
             throw new CommonException("Ngày đặt phòng không được để trống");
         }
         Booking booking = new Booking();
@@ -32,10 +33,11 @@ public class BookingService {
         booking.setStartDate(request.getStartDate());
         booking.setEndDate(request.getEndDate());
         booking.setPrice(request.getPrice());
+        booking.setCreateAt(request.getCreateAt());
         booking.setNumberOfGuests(request.getNumberOfGuests());
         booking.setHouse(house);
         booking.setUser(user);
-        booking.setStatus(request.getStatus());
+        booking.setStatus(BookingStatus.IN_PROGRESS);
         return bookingRepository.save(booking);
     }
 }

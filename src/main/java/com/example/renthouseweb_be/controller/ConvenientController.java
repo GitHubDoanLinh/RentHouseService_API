@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/convenient")
 @CrossOrigin("*")
-public class ConvenientController {
+public class    ConvenientController {
     private final ConvenientServiceImpl convenientService;
 
     public ConvenientController(ConvenientServiceImpl convenientService) {

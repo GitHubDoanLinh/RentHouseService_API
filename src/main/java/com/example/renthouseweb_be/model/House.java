@@ -20,7 +20,7 @@ public class House {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private double pricePerNight;
+    private double price;
     @Column(nullable = false)
     private String location;
     @Column(nullable = false)

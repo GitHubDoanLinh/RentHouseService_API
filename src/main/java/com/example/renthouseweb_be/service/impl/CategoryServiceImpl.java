@@ -3,7 +3,6 @@ package com.example.renthouseweb_be.service.impl;
 import com.example.renthouseweb_be.model.Category;
 import com.example.renthouseweb_be.repository.CategoryRepository;
 import com.example.renthouseweb_be.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

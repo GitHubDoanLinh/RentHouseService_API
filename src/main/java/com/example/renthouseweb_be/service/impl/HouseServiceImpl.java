@@ -2,6 +2,7 @@ package com.example.renthouseweb_be.service.impl;
 
 import com.example.renthouseweb_be.model.Convenient;
 import com.example.renthouseweb_be.model.House;
+import com.example.renthouseweb_be.model.HouseStatus;
 import com.example.renthouseweb_be.model.Image;
 import com.example.renthouseweb_be.repository.ConvenientRepository;
 import com.example.renthouseweb_be.repository.HouseRepository;
@@ -99,6 +100,7 @@ public class HouseServiceImpl implements HouseService {
     private House saveNewHouse(CreateHouseRequest request) {
         House house = new House();
         setCommonHouseProperties(house,request);
+        house.setStatus(HouseStatus.AVAILABLE);
         return houseRepository.save(house);
     }
     private House updateExistingHouse(CreateHouseRequest request) {
@@ -129,7 +131,7 @@ public class HouseServiceImpl implements HouseService {
         house.setBedRoom(request.getBedRoom());
         house.setDescription(request.getDescription());
         house.setKitchen(request.getKitchen());
-        house.setPricePerNight(request.getPrice());
+        house.setPrice(request.getPrice());
         house.setUser(request.getUser());
         house.setLocation(request.getLocation());
         house.setBathRoom(request.getBathRoom());
