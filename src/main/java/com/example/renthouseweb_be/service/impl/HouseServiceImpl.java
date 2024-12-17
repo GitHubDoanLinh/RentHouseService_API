@@ -129,7 +129,7 @@ public class HouseServiceImpl implements HouseService {
         house.setBedRoom(request.getBedRoom());
         house.setDescription(request.getDescription());
         house.setKitchen(request.getKitchen());
-        house.setPrice(request.getPrice());
+        house.setPricePerNight(request.getPrice());
         house.setUser(request.getUser());
         house.setLocation(request.getLocation());
         house.setBathRoom(request.getBathRoom());

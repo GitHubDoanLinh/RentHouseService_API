@@ -28,8 +28,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/auth")
+@CrossOrigin("*")
+
 public class AuthController {
     private  final UserService userService;
     private final RoleService roleService;
