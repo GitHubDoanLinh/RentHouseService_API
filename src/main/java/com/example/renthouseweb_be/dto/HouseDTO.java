@@ -13,6 +13,10 @@ public class HouseDTO {
     private String description;
     private double price;
     private String location;
+    private int bedRoom;
+    private int bathRoom;
+    private int livingRoom;
+    private int kitchen;
     private Category category;
     private Set<Convenient> convenients;
     private  UserDTO userDTO;

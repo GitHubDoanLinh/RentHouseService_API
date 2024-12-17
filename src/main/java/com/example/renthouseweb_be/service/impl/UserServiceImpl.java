@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -34,6 +31,11 @@ public class UserServiceImpl implements UserService {
             throw new CommonException("Email đã tồn tại");
         }
         userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void saveUpdate(User user) throws CommonException {
         userRepository.save(user);
     }
 

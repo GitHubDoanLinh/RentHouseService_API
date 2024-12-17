@@ -90,7 +90,7 @@ public class UserController {
         user1.setDateOfBirth(user.getDateOfBirth());
         user1.setEmail(user.getEmail());
         user1.setImageUser(user.getImageUser());
-        userService.save(user1);
+        userService.saveUpdate(user1);
         return new ResponseEntity<>(modelMapperUtil.map(user1, UserDTO.class), HttpStatus.OK);
     }
 

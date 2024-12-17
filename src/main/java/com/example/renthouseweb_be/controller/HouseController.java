@@ -66,8 +66,13 @@ public class HouseController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<House> delete(@PathVariable Long id) {
-        houseService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            houseService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 //    @PutMapping("/update/{id}")

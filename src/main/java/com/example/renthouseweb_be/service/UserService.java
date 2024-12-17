@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface UserService  extends UserDetailsService{
     void save(User user) throws CommonException;
 
+    void saveUpdate(User user) throws CommonException;
     Iterable<User> findAll();
 
     User findByUsername(String username);
