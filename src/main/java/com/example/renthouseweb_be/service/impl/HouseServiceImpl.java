@@ -88,8 +88,42 @@ public class HouseServiceImpl implements HouseService {
     public House save(House house) {
         return null;
     }
-    public House save(CreateHouseRequest request) {
+
+    public House saveOrUpdateHouse(CreateHouseRequest request) {
+        if (request.getId() == null) {
+            return saveNewHouse(request);
+        } else {
+            return updateExistingHouse(request);
+        }
+    }
+    private House saveNewHouse(CreateHouseRequest request) {
         House house = new House();
+        setCommonHouseProperties(house,request);
+        return houseRepository.save(house);
+    }
+    private House updateExistingHouse(CreateHouseRequest request) {
+        Long houseId = request.getId();
+        House house = houseRepository.findById(houseId)
+                .orElseThrow(() -> new EntityNotFoundException("House with id " + houseId + " not found."));
+        // Update properties for an existing house
+        setCommonHouseProperties(house,request);
+        return houseRepository.save(house);
+    }
+
+    private Set<Convenient> getConvenientsFromRequest(List<Long> convenientIds) {
+        Set<Convenient> convenients = new HashSet<>();
+        if (convenientIds != null && !convenientIds.isEmpty()) {
+            for (Long convenientId : convenientIds) {
+                Convenient convenient = convenientRepository.findById(convenientId)
+                        .orElseThrow(() -> new EntityNotFoundException("Convenient with id " + convenientId + " not found."));
+                convenients.add(convenient);
+            }
+        }
+        return convenients;
+    }
+
+    private void setCommonHouseProperties(House house, CreateHouseRequest request) {
+        // Set properties common to both new and existing houses
         house.setName(request.getName());
         house.setCategory(request.getCategory());
         house.setBedRoom(request.getBedRoom());
@@ -100,17 +134,38 @@ public class HouseServiceImpl implements HouseService {
         house.setLocation(request.getLocation());
         house.setBathRoom(request.getBathRoom());
         house.setLivingRoom(request.getLivingRoom());
-        Set<Convenient> newConvenients = new HashSet<>();
-        if (request.getConvenientIds() != null && !request.getConvenientIds().isEmpty()) {
-            for (Long convenientId : request.getConvenientIds()) {
-                Convenient convenient = convenientRepository.findById(convenientId)
-                        .orElseThrow(() -> new EntityNotFoundException("Convenient with id " + convenientId + " not found."));
-                newConvenients.add(convenient);
-            }
-        }
-        house.setConvenients(newConvenients);
-        return houseRepository.save(house);
+
+        // Set convenients
+        house.setConvenients(getConvenientsFromRequest(request.getConvenientIds()));
     }
+
+
+
+
+
+//    public House save(CreateHouseRequest request) {
+//        House house = new House();
+//        house.setName(request.getName());
+//        house.setCategory(request.getCategory());
+//        house.setBedRoom(request.getBedRoom());
+//        house.setDescription(request.getDescription());
+//        house.setKitchen(request.getKitchen());
+//        house.setPrice(request.getPrice());
+//        house.setUser(request.getUser());
+//        house.setLocation(request.getLocation());
+//        house.setBathRoom(request.getBathRoom());
+//        house.setLivingRoom(request.getLivingRoom());
+//        Set<Convenient> newConvenients = new HashSet<>();
+//        if (request.getConvenientIds() != null && !request.getConvenientIds().isEmpty()) {
+//            for (Long convenientId : request.getConvenientIds()) {
+//                Convenient convenient = convenientRepository.findById(convenientId)
+//                        .orElseThrow(() -> new EntityNotFoundException("Convenient with id " + convenientId + " not found."));
+//                newConvenients.add(convenient);
+//            }
+//        }
+//        house.setConvenients(newConvenients);
+//        return houseRepository.save(house);
+//    }
     @Async
     public CompletableFuture<Void> saveImageListAsync(House house, List<String> imageList) {
         imageList.forEach(image -> {

@@ -43,10 +43,10 @@ public class HouseController {
     @PostMapping("/create")
     public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
         try {
-            House savedHouse = houseService.save(request);
+            House saveHouse = houseService.saveOrUpdateHouse(request);
             //Lưu danh sách ảnh bất đồng bộ.
             List<String> imageList = request.getImages();
-            houseService.saveImageListAsync(savedHouse, imageList);
+            houseService.saveImageListAsync(saveHouse, imageList);
             return new ResponseEntity<>(new CreateHouseResponse( "MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
@@ -54,11 +54,11 @@ public class HouseController {
 
     }
 
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<CreateHouseResponse> update(@PathVariable Long id, @RequestBody CreateHouseRequest request) {
         try {
             request.setId(id);
-            houseService.save(request);
+            houseService.saveOrUpdateHouse(request);
             return new ResponseEntity<>(new CreateHouseResponse("MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
