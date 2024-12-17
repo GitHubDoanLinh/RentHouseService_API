@@ -128,13 +128,14 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) throws CommonException {
         User currentUser = userService.getCurrentUser();
         if (passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword())) {
+            System.out.println(passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword()));
             if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             String newPassword = passwordEncoder.encode(passwordRequest.getPassword());
             currentUser.setPassword(newPassword);
             currentUser.setConfirmPassword(newPassword);
-            userService.save(currentUser);
+            userService.saveUpdate(currentUser);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
