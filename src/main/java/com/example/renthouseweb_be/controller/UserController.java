@@ -60,7 +60,7 @@ public class UserController {
     @GetMapping("/users/logout")
     public ResponseEntity<?> logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
-        return new ResponseEntity<>(new LogoutResponse(true, "MS-LO-01"), HttpStatus.OK);
+        return new ResponseEntity<>(new LogoutResponse("MS-LO-01"), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
@@ -144,9 +144,9 @@ public class UserController {
     public ResponseEntity<VerifyTokenResponse> activateAccount(@RequestParam String token) {
         boolean activationResult = userService.activateUserAccount(token);
         if (activationResult) {
-            return new ResponseEntity<>(new VerifyTokenResponse(true, "MS-VR-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new VerifyTokenResponse("MS-VR-01"), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new VerifyTokenResponse(false, "ER-VR-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new VerifyTokenResponse("ER-VR-01"), HttpStatus.BAD_REQUEST);
         }
     }
 
