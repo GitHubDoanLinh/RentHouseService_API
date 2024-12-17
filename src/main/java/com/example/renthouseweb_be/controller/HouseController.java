@@ -4,6 +4,7 @@ import com.example.renthouseweb_be.dto.HouseDTO;
 import com.example.renthouseweb_be.model.House;
 import com.example.renthouseweb_be.requests.CreateHouseRequest;
 import com.example.renthouseweb_be.response.CreateHouseResponse;
+import com.example.renthouseweb_be.response.DeleteHouseResponse;
 import com.example.renthouseweb_be.service.impl.HouseServiceImpl;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
 import org.springframework.data.domain.Page;
@@ -65,13 +66,13 @@ public class HouseController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<House> delete(@PathVariable Long id) {
+    public ResponseEntity<DeleteHouseResponse> delete(@PathVariable Long id) {
         try {
             houseService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new DeleteHouseResponse(true, "MS-H3-01"), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new DeleteHouseResponse(true, "ER-H3-01"), HttpStatus.BAD_REQUEST);
         }
     }
 

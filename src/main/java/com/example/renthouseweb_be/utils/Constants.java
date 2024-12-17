@@ -19,5 +19,7 @@ public class Constants {
         SystemMessage.put("ER-VR-01","Liên kết kích hoạt không hợp lệ hoặc đã hết hạn.");
         SystemMessage.put("MS-LO-01", "Đăng xuất thành công");
         SystemMessage.put("HR-USER-99","Lỗi khi tạo tài khoản.");
+        SystemMessage.put("MS-H3-01","Xóa nhà thành công");
+        SystemMessage.put("ER-H3-01","Xóa nhà thất bại");
     }
 }
