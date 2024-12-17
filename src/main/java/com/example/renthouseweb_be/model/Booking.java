@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class Booking {
     @Column
     private Date startDate;
     @Column
-    private Date createAt;
+    private LocalDateTime createAt;
     @Column
     private Date endDate;
     @Column(name = "number_of_guests")

@@ -21,5 +21,9 @@ public class Constants {
         SystemMessage.put("HR-USER-99","Lỗi khi tạo tài khoản.");
         SystemMessage.put("MS-H3-01","Xóa nhà thành công");
         SystemMessage.put("ER-H3-01","Xóa nhà thất bại");
+
+        //booking
+        SystemMessage.put("MS-B2-01","Huỷ đặt phòng thành công");
+        SystemMessage.put("ER-B2-02","Huỷ đặt phòng thất bại");
     }
 }
