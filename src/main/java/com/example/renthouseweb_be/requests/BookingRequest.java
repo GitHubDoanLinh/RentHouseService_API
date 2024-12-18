@@ -11,7 +11,7 @@ import java.util.Date;
 public class BookingRequest {
     private BookingStatus status;
     private Date startDate;
-    private Date createAt;
+    private Date endDate;
     private Integer numberOfGuests;
     private Long userId;
     private Long houseId;

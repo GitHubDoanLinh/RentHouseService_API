@@ -56,6 +56,9 @@ public class BookingService {
     public Iterable<Booking> findAllByUserId(Long userId,boolean deleteFlag){
         return bookingRepository.findAllByUserIdAndDeleteFlag(userId,deleteFlag);
     }
+    public Iterable<Booking> findAllByHouseId(Long houseId, boolean deleteFlag) {
+        return bookingRepository.findAllByHouseIdAndAndDeleteFlag(houseId, deleteFlag);
+    }
 
     public void cancelBooking(Long idBooking) {
         Optional<Booking> booking = bookingRepository.findById(idBooking);

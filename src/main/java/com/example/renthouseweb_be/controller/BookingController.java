@@ -45,6 +45,15 @@ public class BookingController {
         return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
     }
 
+    @GetMapping("/house/{houseId}")
+    public ResponseEntity<List<BookingDTO>> showAllByHouseId(@PathVariable Long houseId) {
+        List<Booking> bookings = (List<Booking>) bookingService.findAllByHouseId(houseId,false);
+        if (bookings.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{bookingId}")
     public ResponseEntity<DeleteHouseResponse> cancelBooking(@PathVariable Long bookingId) {
         try {
