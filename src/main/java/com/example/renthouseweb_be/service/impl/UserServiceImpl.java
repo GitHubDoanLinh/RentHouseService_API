@@ -92,7 +92,8 @@ public class UserServiceImpl implements UserService {
         Iterable<User> users = this.findAll();
         boolean isCorrectUser = false;
         for (User currentUser : users) {
-            if (currentUser.getUsername().equals(user.getUsername()) && currentUser.getPassword().equals(user.getPassword()) && currentUser.isEnabled()) {
+            if (currentUser.getUsername().equals(user.getUsername()) && currentUser.getPassword().equals(user.getPassword())
+                    && currentUser.isEnabled()) {
                 isCorrectUser = true;
                 break;
             }

@@ -7,6 +7,7 @@ import com.example.renthouseweb_be.model.Image;
 import com.example.renthouseweb_be.repository.ConvenientRepository;
 import com.example.renthouseweb_be.repository.HouseRepository;
 import com.example.renthouseweb_be.requests.CreateHouseRequest;
+import com.example.renthouseweb_be.requests.SearchRequest;
 import com.example.renthouseweb_be.service.HouseService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,13 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public Iterable<House> findByNameContainsIgnoreCaseAndDeleteFlag(String name, boolean deleteFlag) {
         return houseRepository.findByNameContainsIgnoreCaseAndAndDeleteFlag(name, deleteFlag);
+    }
+
+    @Override
+    public List<House> findByCondition(SearchRequest request) {
+        return houseRepository.findHousesByCriteria(request.getName(), request.getLocation(), request.getCategoryId(),
+                request.getMinPrice(), request.getMaxPrice(), request.getConvenientIds().isEmpty() ? null :
+                        request.getConvenientIds(), false);
     }
 
     @Override

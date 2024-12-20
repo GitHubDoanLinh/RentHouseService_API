@@ -3,6 +3,7 @@ package com.example.renthouseweb_be.controller;
 import com.example.renthouseweb_be.dto.HouseDTO;
 import com.example.renthouseweb_be.model.House;
 import com.example.renthouseweb_be.requests.CreateHouseRequest;
+import com.example.renthouseweb_be.requests.SearchRequest;
 import com.example.renthouseweb_be.response.CreateHouseResponse;
 import com.example.renthouseweb_be.response.DeleteHouseResponse;
 import com.example.renthouseweb_be.service.impl.HouseServiceImpl;
@@ -139,13 +140,12 @@ public class HouseController {
         }
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<HouseDTO>> searchByNameContain(@RequestParam String name) {
-        List<House> houses = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name, false);
-        if(houses.isEmpty()) {
+    public ResponseEntity<List<HouseDTO>> searchByCondition(@RequestBody SearchRequest request) {
+        List<House> house =  houseService.findByCondition(request);
+        if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(modelMapperUtil.mapList(houses, HouseDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(modelMapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
 
 }
