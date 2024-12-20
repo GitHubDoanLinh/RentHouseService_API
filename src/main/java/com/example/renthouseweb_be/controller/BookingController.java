@@ -107,4 +107,15 @@ public class BookingController {
         return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
     }
 
+    @PatchMapping("/status/{idBooking}")
+    public ResponseEntity<?> setBookingStatus(@PathVariable Long idBooking){
+        try {
+            bookingService.setCheckIn(idBooking);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
