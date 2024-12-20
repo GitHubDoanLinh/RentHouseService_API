@@ -85,11 +85,16 @@ public class BookingController {
             @RequestParam("month") int month,
             @RequestParam("status") BookingStatus status,
             @PathVariable("userId") Long userId) {
-        try {
-            List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByMonthAndHost(month, status, userId);
+        if (status == null || month == 0) {
+            List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByHostId(userId);
             return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }  else {
+            try {
+                List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByMonthAndHost(month, status, userId);
+                return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
