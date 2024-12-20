@@ -1,5 +1,6 @@
 package com.example.renthouseweb_be.dto;
 
+import com.example.renthouseweb_be.model.HouseStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,4 +15,5 @@ public class BookingDTO {
     private UserDTO user;
     private HouseDTO house;
     private Double price;
+    private HouseStatus status;
 }

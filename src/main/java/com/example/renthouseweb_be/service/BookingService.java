@@ -57,7 +57,7 @@ public class BookingService {
         return bookingRepository.findAllByUserIdAndDeleteFlag(userId,deleteFlag);
     }
     public Iterable<Booking> findAllByHouseId(Long houseId, boolean deleteFlag) {
-        return bookingRepository.findAllByHouseIdAndAndDeleteFlag(houseId, deleteFlag);
+        return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId, deleteFlag);
     }
 
     public void cancelBooking(Long idBooking) {
@@ -77,5 +77,17 @@ public class BookingService {
                 throw new RuntimeException("Booking cannot be canceled. It's too close to the check-in date.");
             }
         }
+    }
+
+    public Double getTotalPriceByMonthAndStatus(int month, BookingStatus status,Long userId) {
+        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month,status,userId);
+    }
+
+    public Iterable<Booking> getAllBookingByMonthAndHost(int month,BookingStatus status,Long userId){
+        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month,status,userId);
+    }
+
+    public Iterable<Booking> getAllBookingByHostId(Long userId){
+        return bookingRepository.findBookingsByUserIdAndNotDeleted(userId);
     }
 }

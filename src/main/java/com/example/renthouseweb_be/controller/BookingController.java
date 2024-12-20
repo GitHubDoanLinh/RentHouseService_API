@@ -3,6 +3,7 @@ package com.example.renthouseweb_be.controller;
 import com.example.renthouseweb_be.dto.BookingDTO;
 import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.Booking;
+import com.example.renthouseweb_be.model.BookingStatus;
 import com.example.renthouseweb_be.requests.BookingRequest;
 import com.example.renthouseweb_be.response.ApiResponse;
 import com.example.renthouseweb_be.response.DeleteHouseResponse;
@@ -64,6 +65,41 @@ public class BookingController {
         catch (Exception e){
             return new ResponseEntity<>(new DeleteHouseResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{userId}/total-price")
+    public ResponseEntity<Double> getTotalPriceByMonthAndStatusAndUserId(
+            @RequestParam("month") int month,
+            @RequestParam("status") BookingStatus status,
+            @PathVariable("userId") Long userId) {
+        try {
+            Double totalPrice = bookingService.getTotalPriceByMonthAndStatus(month, status, userId);
+            return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{userId}/monthly")
+    public ResponseEntity<List<BookingDTO>> getBookingsByMonthAndStatusAndUserId(
+            @RequestParam("month") int month,
+            @RequestParam("status") BookingStatus status,
+            @PathVariable("userId") Long userId) {
+        try {
+            List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByMonthAndHost(month, status, userId);
+            return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<List<BookingDTO>> getAllBookingByHostId(@PathVariable("userId") Long userId) {
+        List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByHostId(userId);
+        if (bookings.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
     }
 
 }
