@@ -81,8 +81,11 @@ public class BookingService {
         }
     }
 
-    public Double getTotalPriceByMonthAndStatus(int month, BookingStatus status, Long userId) {
-        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month, status, userId);
+    public Double getTotalPriceByMonthAndStatus(int month, Long userId) {
+        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month, BookingStatus.COMPLETED, userId);
+    }
+    public List<Object[]> getTotalMoneyInWeek(int month, Long userId){
+        return bookingRepository.getTotalAmountByWeek(month, BookingStatus.COMPLETED, userId);
     }
 
     public Iterable<Booking> getAllBookingByMonthAndHost(int month,BookingStatus status,Long userId){

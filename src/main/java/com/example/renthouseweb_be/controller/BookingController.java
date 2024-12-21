@@ -73,14 +73,26 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getHistories(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/total-price")
+    @GetMapping("/total-price/{userId}")
     public ResponseEntity<Double> getTotalPriceByMonthAndStatusAndUserId(
             @RequestParam("month") int month,
-            @RequestParam("status") BookingStatus status,
             @PathVariable("userId") Long userId) {
         try {
-            Double totalPrice = bookingService.getTotalPriceByMonthAndStatus(month, status, userId);
+            Double totalPrice = bookingService.getTotalPriceByMonthAndStatus(month, userId);
             return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("moneyWeek/{userId}")
+    public ResponseEntity<List<Object[]>> getTotalMoneyInWeek (
+            @RequestParam("month") int month,
+            @PathVariable("userId") Long userId
+    ){
+        try {
+            List<Object[]> objects = bookingService.getTotalMoneyInWeek(month, userId);
+            return new ResponseEntity<>(objects, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
