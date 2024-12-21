@@ -1,10 +1,10 @@
 package com.example.renthouseweb_be.controller;
 
-import com.example.renthouseweb_be.dto.WishListDTO;
 import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.WishList;
 import com.example.renthouseweb_be.requests.WishListRequest;
 import com.example.renthouseweb_be.response.ApiResponse;
+import com.example.renthouseweb_be.response.WishlistResponse;
 import com.example.renthouseweb_be.response.bookingresponse.CancelBookingResponse;
 import com.example.renthouseweb_be.service.WishListService;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
@@ -27,12 +27,12 @@ public class WishListController {
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<List<WishListDTO>> showAllByUser(@PathVariable Long userId) {
-        List<WishList> wishLists = wishListService.findAllByUserId(userId);
+    public ResponseEntity<List<WishlistResponse>> showAllByUser(@PathVariable Long userId) {
+        List<WishlistResponse> wishLists = wishListService.findAllByUserId(userId);
         if (wishLists.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(mapperUtil.mapList(wishLists, WishListDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(wishLists,HttpStatus.OK);
     }
     @PostMapping()
     public ResponseEntity<?> saveWishList(@RequestBody WishListRequest wishListRequest) {

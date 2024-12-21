@@ -8,6 +8,7 @@ import com.example.renthouseweb_be.repository.HouseRepository;
 import com.example.renthouseweb_be.repository.UserRepository;
 import com.example.renthouseweb_be.repository.WishListRepository;
 import com.example.renthouseweb_be.requests.WishListRequest;
+import com.example.renthouseweb_be.response.WishlistResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,8 +36,8 @@ public class WishListService {
         wishList.setCreatedAt(LocalDateTime.now());
         return wishListRepository.save(wishList);
     }
-    public List<WishList> findAllByUserId(Long userId){
-        return wishListRepository.findAllByUserIdAndDeleteFlag(userId,false);
+    public List<WishlistResponse> findAllByUserId(Long userId){
+        return wishListRepository.findAllWishlists(userId);
     }
     public void deleteWishList(Long wishListId) {
         Optional<WishList> wishList = wishListRepository.findById(wishListId);
