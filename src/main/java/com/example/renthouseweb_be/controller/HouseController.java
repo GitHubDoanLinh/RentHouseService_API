@@ -140,6 +140,7 @@ public class HouseController {
         }
     }
 
+    @PostMapping("/search")
     public ResponseEntity<List<HouseDTO>> searchByCondition(@RequestBody SearchRequest request) {
         List<House> house =  houseService.findByCondition(request);
         if (house.isEmpty()) {

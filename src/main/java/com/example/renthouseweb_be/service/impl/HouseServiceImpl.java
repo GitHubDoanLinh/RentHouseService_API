@@ -78,9 +78,13 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public List<House> findByCondition(SearchRequest request) {
-        return houseRepository.findHousesByCriteria(request.getName(), request.getLocation(), request.getCategoryId(),
-                request.getMinPrice(), request.getMaxPrice(), request.getConvenientIds().isEmpty() ? null :
-                        request.getConvenientIds(), false);
+        return houseRepository.findHousesByCriteria(
+                request.getName(),
+                request.getLocation(),
+                request.getCategoryId(),
+                request.getMinPrice(),
+                request.getMaxPrice(),
+                request.getConvenientIds().isEmpty() ? null : request.getConvenientIds(), false);
     }
 
     @Override

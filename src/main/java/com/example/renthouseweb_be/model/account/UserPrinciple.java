@@ -1,44 +1,47 @@
 package com.example.renthouseweb_be.model.account;
 
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserPrinciple implements UserDetails {
-    @Serial
     private static final long serialVersionUID = 1L;
 
-    @Getter
-    private Long id;
+    private final Long id;
+    private final String username;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> roles;
+    private final int isOwner;  // New field for isOwner
 
-    private String username;
-
-    private String password;
-
-    private Collection<? extends GrantedAuthority> roles;
-
-    public UserPrinciple(Long id, String username, String password, Collection<? extends GrantedAuthority> roles) {
+    public UserPrinciple(Long id, String username, String password, Collection<? extends GrantedAuthority> roles, int isOwner) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.isOwner = isOwner;
     }
 
     public static UserPrinciple build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+
         return new UserPrinciple(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getIsOwner() // Set isOwner from the User entity
         );
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
@@ -56,6 +59,9 @@ public class UserPrinciple implements UserDetails {
         return roles;
     }
 
+    public int getIsOwner() {
+        return isOwner;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -88,6 +94,6 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(id);
     }
 }

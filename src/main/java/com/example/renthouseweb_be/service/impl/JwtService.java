@@ -1,50 +1,59 @@
 package com.example.renthouseweb_be.service.impl;
 
 import com.example.renthouseweb_be.model.account.UserPrinciple;
+import com.example.renthouseweb_be.security.jwt.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.security.Keys;
-import org.slf4j.LoggerFactory;
+
+
 import javax.crypto.SecretKey;
-import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
     private static final long EXPIRE_TIME = 86400000000L;
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class.getName());
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public JwtService(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     public String generateTokenLogin(Authentication authentication) {
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-        return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + EXPIRE_TIME * 1000))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
-                .compact();
+        int isOwner = determineIsOwner(userPrincipal);
+        SecretKey secretKey = jwtTokenProvider.getKey();
+        return jwtTokenProvider.generateToken(userPrincipal.getUsername(), EXPIRE_TIME, isOwner, secretKey);
     }
+
     public boolean validateJwtToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException e) {
-            logger.error("Invalid JWT signature -> Message: {} ", e);
-        } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token -> Message: {}", e);
-        } catch (ExpiredJwtException e) {
-            logger.error("Expired JWT token -> Message: {}", e);
-        } catch (UnsupportedJwtException e) {
-            logger.error("Unsupported JWT token -> Message: {}", e);
-        } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty -> Message: {}", e);
-        }
-        return false;
+        SecretKey secretKey = jwtTokenProvider.getKey();
+        return jwtTokenProvider.validateToken(authToken, secretKey);
     }
+
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody().getSubject();
+        return jwtTokenProvider.getUsernameFromToken(token);
+    }
+
+    public int getIsOwnerFromJwtToken(String token) {
+        return jwtTokenProvider.getIsOwnerFromToken(token);
+    }
+
+    private int determineIsOwner(UserPrinciple userPrincipal) {
+        // Implement your logic to determine isOwner based on the numeric value in isOwner field
+        // Replace this with your actual logic.
+
+        int isOwnerValue = userPrincipal.getIsOwner();
+
+        if (isOwnerValue == 2) {
+            return 2; // User has the highest authority for managing house rentals
+        } else if (isOwnerValue == 1) {
+            return 1; // User is pending for admin approval to become an owner
+        } else {
+            return 0; // User is a regular user without authority for managing house rentals
+        }
     }
 }
