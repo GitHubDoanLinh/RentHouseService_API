@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,5 +98,9 @@ public class BookingService {
             booking.get().setStatus(BookingStatus.CHECK_IN);
             bookingRepository.save(booking.get());
         }
+    }
+
+    public List<Booking> findByUserIdAndHouseIdAndStatusAndDeleteFlag(Long userId, Long houseId){
+        return bookingRepository.findCompletedBookings(userId,houseId,BookingStatus.COMPLETED,false);
     }
 }
