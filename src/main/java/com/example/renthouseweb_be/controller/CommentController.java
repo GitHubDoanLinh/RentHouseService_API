@@ -5,6 +5,7 @@ import com.example.renthouseweb_be.exception.CommonException;
 import com.example.renthouseweb_be.model.Comment;
 import com.example.renthouseweb_be.requests.CommentRequest;
 import com.example.renthouseweb_be.response.ApiResponse;
+import com.example.renthouseweb_be.response.bookingresponse.CancelBookingResponse;
 import com.example.renthouseweb_be.service.CommentService;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,16 @@ public class CommentController {
             return new ResponseEntity<>(new ApiResponse("01", e.getMessage(), null), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse("99", "Lỗi hệ thống", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        try {
+            commentService.deleteComment(commentId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new CancelBookingResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
         }
     }
 }

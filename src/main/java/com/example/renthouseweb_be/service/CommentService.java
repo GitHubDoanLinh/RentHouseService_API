@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CommentService {
     @Autowired
@@ -47,5 +49,15 @@ public class CommentService {
     }
     public List<Comment> findAllByHouseId(Long houseId) {
         return commentRepository.findAllByHouseIdAndDeleteFlag(houseId,false);
+    }
+
+    public void deleteComment (Long commentId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (comment.isPresent()){
+            comment.get().setDeleteFlag(true);
+            commentRepository.save(comment.get());
+        }else {
+            throw new RuntimeException("Comment is not found.");
+        }
     }
 }

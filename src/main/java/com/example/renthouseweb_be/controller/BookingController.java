@@ -6,7 +6,8 @@ import com.example.renthouseweb_be.model.Booking;
 import com.example.renthouseweb_be.model.BookingStatus;
 import com.example.renthouseweb_be.requests.BookingRequest;
 import com.example.renthouseweb_be.response.ApiResponse;
-import com.example.renthouseweb_be.response.DeleteHouseResponse;
+import com.example.renthouseweb_be.response.HistoryResponse;
+import com.example.renthouseweb_be.response.bookingresponse.CancelBookingResponse;
 import com.example.renthouseweb_be.service.BookingService;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
 import org.springframework.http.HttpStatus;
@@ -57,14 +58,19 @@ public class BookingController {
     }
 
     @DeleteMapping("/{bookingId}")
-    public ResponseEntity<DeleteHouseResponse> cancelBooking(@PathVariable Long bookingId) {
+    public ResponseEntity<CancelBookingResponse> cancelBooking(@PathVariable Long bookingId) {
         try {
             bookingService.cancelBooking(bookingId);
-            return new ResponseEntity<>(new DeleteHouseResponse("MS-B2-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new CancelBookingResponse("MS-B2-01"), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(new DeleteHouseResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CancelBookingResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/histories/{userId}")
+    public ResponseEntity<List<HistoryResponse>> getHistories(@PathVariable Long userId) {
+        return new ResponseEntity<>(bookingService.getHistories(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/total-price")

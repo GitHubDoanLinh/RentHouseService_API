@@ -10,6 +10,7 @@ import com.example.renthouseweb_be.repository.BookingRepository;
 import com.example.renthouseweb_be.repository.HouseRepository;
 import com.example.renthouseweb_be.repository.UserRepository;
 import com.example.renthouseweb_be.requests.BookingRequest;
+import com.example.renthouseweb_be.response.HistoryResponse;
 import com.example.renthouseweb_be.service.impl.HouseServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -102,5 +103,9 @@ public class BookingService {
 
     public List<Booking> findByUserIdAndHouseIdAndStatusAndDeleteFlag(Long userId, Long houseId){
         return bookingRepository.findCompletedBookings(userId,houseId,BookingStatus.COMPLETED,false);
+    }
+
+    public List<HistoryResponse> getHistories(Long userId) {
+        return bookingRepository.getHistories(userId);
     }
 }
