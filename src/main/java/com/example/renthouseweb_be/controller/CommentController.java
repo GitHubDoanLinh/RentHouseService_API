@@ -27,7 +27,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/house/{houseId}")
+    @GetMapping("/{houseId}")
     public ResponseEntity<List<CommentDTO>> findAllByHouseId(@PathVariable Long houseId) {
         List<Comment> comments = commentService.findAllByHouseId(houseId);
         if (comments.isEmpty()) {
