@@ -14,6 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryResponse {
+    private Long bookingId;
+    private Long idHost;
+    private Long houseId;
     private String categoryName;
     private Double price;
     private String name;
