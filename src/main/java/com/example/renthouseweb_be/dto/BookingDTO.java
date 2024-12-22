@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class BookingDTO {
+    private Long id;
     private LocalDateTime createAt;
     private Date startDate;
     private Date endDate;

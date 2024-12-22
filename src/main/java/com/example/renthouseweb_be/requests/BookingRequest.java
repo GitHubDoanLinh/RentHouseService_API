@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class BookingRequest {
-    private BookingStatus status;
+//    private BookingStatus status;
     private Date startDate;
     private Date endDate;
     private Integer numberOfGuests;

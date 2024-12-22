@@ -51,9 +51,9 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/admin/users")
-    public ResponseEntity<Iterable<User>> showAllUserByAdmin() {
-        Iterable<User> users = userService.findAll();
+    @GetMapping("/admin/{id}/users")
+    public ResponseEntity<Iterable<User>> showAllUserByAdmin(@PathVariable Long id) {
+        Iterable<User> users = userService.findAllByIdNotAndDeleteFlag(id);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -147,6 +147,37 @@ public class UserController {
             return new ResponseEntity<>(new VerifyTokenResponse("MS-VR-01"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new VerifyTokenResponse("ER-VR-01"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/users/status/{id}")
+    public ResponseEntity<?> registerToHost(@PathVariable Long id){
+        try {
+            userService.registerHost(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PatchMapping("/admin/status/{id}")
+    public ResponseEntity<?> acceptToHost(@PathVariable Long id){
+        try {
+            userService.acceptHost(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("users/{id}")
+    public ResponseEntity<?> removeUser(@PathVariable Long id){
+        try {
+            userService.deleteUser(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

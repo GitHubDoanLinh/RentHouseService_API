@@ -3,14 +3,15 @@ package com.example.renthouseweb_be.service.impl;
 import com.example.renthouseweb_be.model.account.Role;
 import com.example.renthouseweb_be.repository.RoleRepository;
 import com.example.renthouseweb_be.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+    public RoleServiceImpl(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public Iterable<Role> findAll() {

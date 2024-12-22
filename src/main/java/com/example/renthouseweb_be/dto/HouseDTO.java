@@ -19,5 +19,5 @@ public class HouseDTO {
     private int kitchen;
     private Category category;
     private Set<Convenient> convenients;
-    private  UserDTO userDTO;
+    private UserDTO userDTO;
 }

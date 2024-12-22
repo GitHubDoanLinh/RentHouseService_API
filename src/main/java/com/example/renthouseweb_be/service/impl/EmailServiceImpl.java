@@ -32,8 +32,8 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    @Override
-    public String sendSimpleMail(EmailDetails details) {
+    public String sendSimpleMail(EmailDetails details)
+    {
         try {
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
@@ -44,14 +44,15 @@ public class EmailServiceImpl implements EmailService {
             String htmlTemplate = Arrays.toString(readFile("template.html"));
             javaMailSender.send(mailMessage);
             return "Mail Sent Successfully...";
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return "Error while Sending Mail";
         }
     }
 
     public String
-    sendMailWithAttachment(EmailDetails details) {
-        // Creating a mime message
+    sendMailWithAttachment(EmailDetails details)
+    {
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
@@ -60,7 +61,6 @@ public class EmailServiceImpl implements EmailService {
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
-            // Adding the attachment
             FileSystemResource file
                     = new FileSystemResource(
                     new File(details.getAttachment()));
@@ -79,9 +79,9 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            MimeMessageHelper mimeMessageHelper= new MimeMessageHelper(mimeMessage, true);;
             mimeMessageHelper.setTo(details.getRecipient());
-            String htmlContent = templateEngine.process(template, context);
+            String htmlContent = templateEngine.process(template,context);
             mimeMessageHelper.setText(htmlContent, true);
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";

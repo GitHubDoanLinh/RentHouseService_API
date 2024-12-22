@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Iterable<Image> findAllByDeleteFlag(boolean deleteFlag);
-    Iterable<Image> findAllByHouseIdAndAndDeleteFlag(Long houseId, boolean deleteFlag);
+    Iterable<Image> findAllByHouseIdAndDeleteFlag(Long houseId,boolean deleteFlag);
 }

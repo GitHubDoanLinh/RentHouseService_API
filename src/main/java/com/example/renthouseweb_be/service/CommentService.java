@@ -46,13 +46,13 @@ public class CommentService {
             comment.setContent(request.getContent());
             return commentRepository.save(comment);
         }
-    }
-    public List<Comment> findAllByHouseId(Long houseId) {
+
+    }public List<Comment> findAllByHouseId(Long houseId) {
         return commentRepository.findAllByHouseIdAndDeleteFlag(houseId,false);
     }
 
     public void deleteComment (Long commentId) {
-        Optional<Comment> comment = commentRepository.findById(commentId);
+        Optional<Comment>  comment = commentRepository.findById(commentId);
         if (comment.isPresent()){
             comment.get().setDeleteFlag(true);
             commentRepository.save(comment.get());

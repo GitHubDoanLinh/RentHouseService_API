@@ -8,7 +8,6 @@ import com.example.renthouseweb_be.response.ApiResponse;
 import com.example.renthouseweb_be.response.bookingresponse.CancelBookingResponse;
 import com.example.renthouseweb_be.service.CommentService;
 import com.example.renthouseweb_be.utils.ModelMapperUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +33,7 @@ public class CommentController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(mapperUtil.mapList(comments, CommentDTO.class), HttpStatus.OK);
+
     }
 
     @PostMapping("")

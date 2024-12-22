@@ -12,8 +12,7 @@ import java.util.List;
 @RequestMapping("/categories")
 @CrossOrigin("*")
 public class CategoryController {
-    final
-    CategoryServiceImpl categoryService;
+    private final CategoryServiceImpl categoryService;
 
     public CategoryController(CategoryServiceImpl categoryService) {
         this.categoryService = categoryService;
@@ -21,7 +20,7 @@ public class CategoryController {
     @GetMapping("")
     public ResponseEntity<List<Category>> showAll() {
         List<Category> categories = (List<Category>) categoryService.findAllByDeleteFlag(false);
-        if(categories.isEmpty()) {
+        if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(categories, HttpStatus.OK);

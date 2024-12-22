@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
             throw new CommonException("Email đã tồn tại");
         }
         userRepository.save(user);
-        userRepository.save(user);
     }
 
     @Override
@@ -42,6 +41,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Iterable<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Iterable<User> findAllByIdNotAndDeleteFlag(Long id) {
+        return userRepository.findAllByIdNotAndDeleteFlag(id, false);
     }
 
     @Override
@@ -148,6 +152,31 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public void registerHost(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        if (user.isPresent()){
+            user.get().setIsOwner(1);
+            userRepository.save(user.get());
+        }
+    }
+    @Override
+    public void acceptHost(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        if (user.isPresent()){
+            user.get().setIsOwner(2);
+            userRepository.save(user.get());
+        }
+    }
+    @Override
+    public void deleteUser(Long id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+            user.get().setDeleteFlag(true);
+            userRepository.save(user.get());
+        }
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Image {
     private House house;
     @Column(columnDefinition = "tinyint default 0")
     private boolean deleteFlag;
-    public Image(){
+    public Image() {
 
     }
 }

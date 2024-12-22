@@ -36,12 +36,14 @@ public class BookingService {
         this.houseRepository = houseRepository;
     }
     public Booking save(BookingRequest request) throws CommonException {
-        if (request.getStartDate() == null  || request.getEndDate() == null) {
+        if (request.getStartDate() == null || request.getEndDate() == null) {
             throw new CommonException("Ngày đặt phòng không được để trống");
         }
         Booking booking = new Booking();
+
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new CommonException("Không tìm thấy tài khoản"));
         House house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new CommonException("Không tìm tấy nhà"));
+
         booking.setStartDate(request.getStartDate());
         booking.setEndDate(request.getEndDate());
         booking.setPrice(request.getPrice());
@@ -55,11 +57,8 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Iterable<Booking> findAllByUserId(Long userId,boolean deleteFlag){
-        return bookingRepository.findAllByUserIdAndDeleteFlag(userId,deleteFlag);
-    }
-    public Iterable<Booking> findAllByHouseId(Long houseId, boolean deleteFlag) {
-        return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId, deleteFlag);
+    public Iterable<Booking> findAllByUserId(Long userId, boolean deleteFlag) {
+        return bookingRepository.findAllByUserIdAndDeleteFlag(userId, deleteFlag);
     }
 
     public void cancelBooking(Long idBooking) {
@@ -81,6 +80,9 @@ public class BookingService {
         }
     }
 
+    public Iterable<Booking> findAllByHouseId(Long houseId, boolean deleteFlag) {
+        return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId, deleteFlag);
+    }
     public Double getTotalPriceByMonthAndStatus(int month, Long userId) {
         return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month, BookingStatus.COMPLETED, userId);
     }
@@ -88,11 +90,11 @@ public class BookingService {
         return bookingRepository.getTotalAmountByWeek(month, BookingStatus.COMPLETED, userId);
     }
 
-    public Iterable<Booking> getAllBookingByMonthAndHost(int month,BookingStatus status,Long userId){
-        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month,status,userId);
+    public Iterable<Booking> getAllBookingByMonthAndHost(int month, BookingStatus status, Long userId) {
+        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month, status, userId);
     }
 
-    public Iterable<Booking> getAllBookingByHostId(Long userId){
+    public Iterable<Booking> getAllBookingByHostId(Long userId) {
         return bookingRepository.findBookingsByUserIdAndNotDeleted(userId);
     }
 
@@ -103,7 +105,6 @@ public class BookingService {
             bookingRepository.save(booking.get());
         }
     }
-
     public List<Booking> findByUserIdAndHouseIdAndStatusAndDeleteFlag(Long userId, Long houseId){
         return bookingRepository.findCompletedBookings(userId,houseId,BookingStatus.COMPLETED,false);
     }

@@ -5,7 +5,6 @@ import com.example.renthouseweb_be.security.jwt.JwtAuthenticationFilter;
 import com.example.renthouseweb_be.security.jwt.RestAuthenticationEntryPoint;
 import com.example.renthouseweb_be.service.UserService;
 import com.example.renthouseweb_be.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,10 +30,8 @@ public class SecurityConfig {
     public UserService userService() {
         return new UserServiceImpl();
     }
-    @Autowired
-    private UserService userService;
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -54,7 +51,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler(){
+    public CustomAccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
     @Bean
@@ -84,5 +81,4 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
-
 }

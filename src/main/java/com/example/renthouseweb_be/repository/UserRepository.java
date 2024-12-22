@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String userName);
+    Iterable<User> findAllByIdNotAndDeleteFlag(Long id, boolean deleteFlag);
+    User findByUsername(String username);
     User findByEmail(String email);
-    User findByVerificationToken(String token);
+    User findByVerificationToken(String email);
     Iterable<User> findByUsernameContaining(String name);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);

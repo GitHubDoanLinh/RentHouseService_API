@@ -38,7 +38,6 @@ public class BookingController {
             return new ResponseEntity<>(new ApiResponse("99", "Lỗi hệ thống", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @GetMapping("/{userId}")
     public ResponseEntity<List<BookingDTO>> showAllByUserId(@PathVariable Long userId, boolean deleteFlag) {
         List<Booking> bookings = (List<Booking>) bookingService.findAllByUserId(userId,false);
@@ -46,6 +45,11 @@ public class BookingController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/histories/{userId}")
+    public ResponseEntity<List<HistoryResponse>> getHistories(@PathVariable Long userId) {
+        return new ResponseEntity<>(bookingService.getHistories(userId), HttpStatus.OK);
     }
 
     @GetMapping("/house/{houseId}")
@@ -66,11 +70,6 @@ public class BookingController {
         catch (Exception e){
             return new ResponseEntity<>(new CancelBookingResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @GetMapping("/histories/{userId}")
-    public ResponseEntity<List<HistoryResponse>> getHistories(@PathVariable Long userId) {
-        return new ResponseEntity<>(bookingService.getHistories(userId), HttpStatus.OK);
     }
 
     @GetMapping("/total-price/{userId}")
@@ -96,6 +95,7 @@ public class BookingController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @GetMapping("/{userId}/monthly")
@@ -106,7 +106,7 @@ public class BookingController {
         if (status == null || month == 0) {
             List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByHostId(userId);
             return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
-        }  else {
+        } else {
             try {
                 List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByMonthAndHost(month, status, userId);
                 return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
@@ -115,7 +115,6 @@ public class BookingController {
             }
         }
     }
-
     @GetMapping("/list/{userId}")
     public ResponseEntity<List<BookingDTO>> getAllBookingByHostId(@PathVariable("userId") Long userId) {
         List<Booking> bookings = (List<Booking>) bookingService.getAllBookingByHostId(userId);
