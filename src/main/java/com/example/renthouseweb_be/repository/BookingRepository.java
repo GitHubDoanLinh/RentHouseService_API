@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -65,4 +66,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             " WHERE 1 = 1" +
             " AND b.user.id = :userId AND b.deleteFlag = false")
     List<HistoryResponse> getHistories(@Param("userId") Long userId);
+
+    @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.deleteFlag = false AND b.endDate < :currentDate")
+    List<Booking> findExpiredBookings(@Param("status") BookingStatus status, @Param("currentDate") Date currentDate);
+
 }

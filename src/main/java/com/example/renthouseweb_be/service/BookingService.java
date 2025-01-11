@@ -62,21 +62,31 @@ public class BookingService {
     }
 
     public void cancelBooking(Long idBooking) {
-        Optional<Booking> booking = bookingRepository.findById(idBooking);
-        if (booking.isPresent()) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(idBooking);
+
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
             Date currentDate = new Date();
-            Date bookingDate = booking.get().getStartDate();
+            Date bookingDate = booking.getStartDate();
             LocalDate currentLocalDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate bookingLocalDate = bookingDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Kiểm tra điều kiện hủy đặt phòng
             if (currentLocalDate.isBefore(bookingLocalDate.minusDays(1))) {
-                booking.get().setDeleteFlag(true);
-                bookingRepository.save(booking.get());
-                House house = booking.get().getHouse();
+                // Đặt cờ xóa
+                booking.setDeleteFlag(true);
+
+                booking.setStatus(BookingStatus.CANCELLED);
+                bookingRepository.save(booking);
+
+                House house = booking.getHouse();
                 house.setStatus(HouseStatus.AVAILABLE);
                 houseService.save(house);
             } else {
                 throw new RuntimeException("Booking cannot be canceled. It's too close to the check-in date.");
             }
+        } else {
+            throw new RuntimeException("Booking not found.");
         }
     }
 

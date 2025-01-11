@@ -41,6 +41,23 @@ public class HouseController {
         return new ResponseEntity<>(modelMapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
 
+    @GetMapping("/showAll")
+    public ResponseEntity<Page<House>> getAllHouse(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam String sortOrder
+    ) {
+        Pageable pageable;
+        if (sortOrder.isEmpty()) {
+            pageable = PageRequest.of(page, size);
+        } else {
+            Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), "price");
+            pageable = PageRequest.of(page, size, sort);
+        }
+        Page<House> houses = houseService.findAll(pageable);
+        return new ResponseEntity<>(houses, HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
         try {
@@ -52,7 +69,6 @@ public class HouseController {
         } catch (Exception e) {
             return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @PatchMapping("/update/{id}")
@@ -93,22 +109,6 @@ public class HouseController {
         return new ResponseEntity<>(modelMapperUtil.map(house, HouseDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/showAll")
-    public ResponseEntity<Page<House>> getAllHouse(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size,
-            @RequestParam String sortOrder
-    ) {
-        Pageable pageable;
-        if (sortOrder.isEmpty()) {
-            pageable = PageRequest.of(page, size);
-        } else {
-            Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), "price");
-            pageable = PageRequest.of(page, size, sort);
-        }
-        Page<House> houses = houseService.findAll(pageable);
-        return new ResponseEntity<>(houses, HttpStatus.OK);
-    }
 
     @PostMapping("/searchByCate")
     public ResponseEntity<Page<House>> searchByCategory(@PageableDefault(value = 12)
