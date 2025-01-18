@@ -10,7 +10,6 @@ import com.example.renthouseweb_be.requests.CreateHouseRequest;
 import com.example.renthouseweb_be.requests.SearchRequest;
 import com.example.renthouseweb_be.service.HouseService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
